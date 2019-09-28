@@ -62,6 +62,8 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
 
     public abstract void add(Collection<Track> tracks, int index, Promise promise);
 
+    public abstract void updateTrackObject(Track track, int index, Promise promise);
+
     public abstract void remove(List<Integer> indexes, Promise promise);
 
     public abstract void removeUpcomingTracks();

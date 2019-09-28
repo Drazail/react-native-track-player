@@ -17,6 +17,8 @@ import com.guichaguri.trackplayer.service.MusicService;
 import com.guichaguri.trackplayer.service.Utils;
 import com.guichaguri.trackplayer.service.models.Track;
 import com.guichaguri.trackplayer.service.player.ExoPlayback;
+import com.guichaguri.trackplayer.service.player.LocalPlayback;
+
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -227,92 +229,26 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
 
     @ReactMethod
     public void updateTrack(final String id, ReadableArray tracks,  final Promise callback) {
+        try {
+            final ArrayList bundleList = Arguments.toList(tracks);
 
-        final ArrayList bundleList = Arguments.toList(tracks);
-        Promise promise = new Promise() {
-            @Override
-            public void resolve(@Nullable Object value) {
-
-            }
-
-            @Override
-            public void reject(String code, String message) {
-
-            }
-
-            @Override
-            public void reject(String code, Throwable throwable) {
-
-            }
-
-            @Override
-            public void reject(String code, String message, Throwable throwable) {
-
-            }
-
-            @Override
-            public void reject(Throwable throwable) {
-
-            }
-
-            @Override
-            public void reject(Throwable throwable, WritableMap userInfo) {
-
-            }
-
-            @Override
-            public void reject(String code, @Nonnull WritableMap userInfo) {
-
-            }
-
-            @Override
-            public void reject(String code, Throwable throwable, WritableMap userInfo) {
-
-            }
-
-            @Override
-            public void reject(String code, String message, @Nonnull WritableMap userInfo) {
-
-            }
-
-            @Override
-            public void reject(String code, String message, Throwable throwable, WritableMap userInfo) {
-
-            }
-
-            @Override
-            public void reject(String message) {
-
-            }
-        };
-        waitForConnection(() -> {
-            Object o = null;
-            List<Integer> indexes = new ArrayList<>();
-            List<Track> queue = binder.getPlayback().getQueue();
             List<Track> trackList;
-            try {
-                trackList = Track.createTracks(getReactApplicationContext(), bundleList, binder.getRatingType());
-            } catch(Exception ex) {
-                callback.reject("invalid_track_object", ex);
-                return;
-            }
-            int index = -1;
+            trackList = Track.createTracks(getReactApplicationContext(), bundleList, binder.getRatingType());
+            waitForConnection(() -> {
+                List<Track> queue = binder.getPlayback().getQueue();
 
-                for(int i = 0; i < queue.size(); i++) {
-                    if(queue.get(i).id.equals(id)) {
-                        index = i;
-                        indexes.add(index);
+                for (int i = 0; i < queue.size(); i++) {
+                    if (queue.get(i).id.equals(id)) {
+
+                        binder.getPlayback().updateTrackObject(trackList.get(0),i,callback);
                         break;
                     }
                 }
-
-            if(index == -1) {
-                callback.reject("track_not_in_queue", "Given track ID was not found in queue");
-            } else {
-                binder.getPlayback().remove(indexes, promise);
-                binder.getPlayback().add(trackList.get(0), index, callback);
-            }
-        });
+            });
+        }catch (Exception ex){
+            callback.reject("invalid_track_object", ex);
+            return;
+        }
     }
 
     @ReactMethod
