@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Guichaguri
+ * @author Drazail
  */
 public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
@@ -81,12 +81,23 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
     @Override
     public void updateTrackObject (Track track, int index, Promise promise){
-        queue.set(index, track);
-        MediaSource trackSource = track.toMediaSource(context, this);
-        source.addMediaSource(index, trackSource, manager.getHandler(), Utils.toRunnable(promise));
-
-        prepare();
-    }
+        try {
+            int currentIndex = player.getCurrentWindowIndex();
+            if (index < 0 || index > queue.size()) {
+                promise.resolve(null);
+            } else {
+    
+                queue.set(index, track);
+                MediaSource trackSource = track.toMediaSource(context, this);
+                source.removeMediaSource(index);
+                source.addMediaSource(index, trackSource, manager.getHandler(), Utils.toRunnable(promise));
+    
+                prepare();
+                }
+            }catch(Exception ex) {
+            Log.w(Utils.LOG, "Couldnt update Track", ex);
+            }
+        }
 
     @Override
     public void add(Collection<Track> tracks, int index, Promise promise) {
