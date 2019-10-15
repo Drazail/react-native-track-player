@@ -37,6 +37,8 @@ ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modul
 		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:55-77
 	android:exported
 		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:78-101
+	android:stopWithTask
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:102-129
 	android:name
 		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:18-54
 intent-filter#action:name:android.intent.action.MEDIA_BUTTON

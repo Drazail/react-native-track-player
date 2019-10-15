@@ -20,10 +20,7 @@ import com.guichaguri.trackplayer.service.MusicManager;
 import com.guichaguri.trackplayer.service.Utils;
 import com.guichaguri.trackplayer.service.models.Track;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Drazail
@@ -139,6 +136,62 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
             }
         }
     }
+
+    @Override
+    public void move(int index, int newIndex, Promise promise) {
+        queue.add(newIndex, queue.remove(index));
+        source.moveMediaSource(index, newIndex, manager.getHandler(), Utils.toRunnable(promise));
+    }
+
+    @Override
+    public void shuffle(final Promise promise) {
+        Random rand = new Random();
+        int length = queue.size();
+
+        // Fisher-Yates shuffle
+        for (int i = 0; i < length; i++) {
+            int swapIndex = rand.nextInt(i + 1);
+
+            queue.add(swapIndex, queue.remove(i));
+
+            if (length - 1 == i) {
+                // Resolve the promise after the last move command
+                source.moveMediaSource(i, swapIndex, manager.getHandler(), Utils.toRunnable(promise));
+            } else {
+                source.moveMediaSource(i, swapIndex);
+            }
+        }
+    }
+
+    @Override
+    public void shuffleFromIndex(final int index,  Promise promise) {
+        Random rand = new Random();
+        int length = queue.size();
+
+        // Fisher-Yates shuffle
+        for (int i = index+1; i < length; i++) {
+            int swapIndex = rand.nextInt(i + 1);
+
+            queue.add(swapIndex, queue.remove(i));
+
+            if (length - 1 == i) {
+                // Resolve the promise after the last move command
+                source.moveMediaSource(i, swapIndex, manager.getHandler(), Utils.toRunnable(promise));
+            } else {
+                source.moveMediaSource(i, swapIndex);
+            }
+        }
+    }
+
+    @Override
+    public void setRepeatMode(int repeatMode) {
+        player.setRepeatMode(repeatMode);
+    }
+
+    public int getRepeatMode() {
+        return player.getRepeatMode();
+    }
+
 
     @Override
     public void removeUpcomingTracks() {

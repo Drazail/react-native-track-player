@@ -25,7 +25,8 @@
         <service
             android:name="com.guichaguri.trackplayer.service.MusicService"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            android:stopWithTask="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
