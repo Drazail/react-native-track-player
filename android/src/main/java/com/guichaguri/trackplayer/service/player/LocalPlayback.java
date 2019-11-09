@@ -170,8 +170,8 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
         // Fisher-Yates shuffle
         for (int i = index+1; i < length; i++) {
-            int swapIndex = rand.nextInt(i + 1);
 
+            int swapIndex = rand.nextInt(length - i)+i;
             queue.add(swapIndex, queue.remove(i));
 
             if (length - 1 == i) {
