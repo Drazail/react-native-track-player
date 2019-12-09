@@ -1,65 +1,67 @@
 -- Merging decision tree log ---
 manifest
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
 	package
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:3:11-47
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:3:11-47
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:1-26:12
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:11-69
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:2:11-69
 uses-permission#android.permission.WAKE_LOCK
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:5:5-68
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:5:5-68
 	android:name
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:5:22-65
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:5:22-65
 uses-permission#android.permission.FOREGROUND_SERVICE
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:6:5-77
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:6:5-77
 	android:name
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:6:22-74
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:6:22-74
 application
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:8:5-24:19
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:8:5-24:19
 service#com.guichaguri.trackplayer.service.MusicService
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:9-15:19
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:9-15:19
 	android:enabled
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:55-77
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:55-77
 	android:exported
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:78-101
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:78-101
+	android:stopWithTask
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:102-129
 	android:name
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:18-54
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:11:18-54
 intent-filter#action:name:android.intent.action.MEDIA_BUTTON
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:12:13-14:29
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:12:13-14:29
 action#android.intent.action.MEDIA_BUTTON
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:13:17-77
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:13:17-77
 	android:name
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:13:25-74
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:13:25-74
 receiver#androidx.media.session.MediaButtonReceiver
-ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:18:9-22:20
+ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:18:9-22:20
 	android:name
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:18:19-76
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml:18:19-76
 uses-sdk
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
-		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\ahangifyNewPull\ahangify-app\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		ADDED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
+		INJECTED from F:\Git_2_Main_Projects\AhangifyReactNative\NewApp\ahangify\node_modules\react-native-track-player\android\src\main\AndroidManifest.xml
