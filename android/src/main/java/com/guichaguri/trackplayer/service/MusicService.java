@@ -9,8 +9,6 @@ import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.media.session.MediaButtonReceiver;
-import android.app.NotificationManager;
-import android.content.Context;
 
 import com.facebook.react.HeadlessJsTaskService;
 import com.facebook.react.ReactInstanceManager;
@@ -20,26 +18,13 @@ import com.facebook.react.jstasks.HeadlessJsTaskConfig;
 import javax.annotation.Nullable;
 
 /**
- * @author Drazail
+ * @author Guichaguri
  */
 public class MusicService extends HeadlessJsTaskService {
 
     MusicManager manager;
     Handler handler;
 
-    @Override
-    public void onCreate(){
-        super.onCreate();
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(Utils.NOTIFICATION_CHANNEL,"MusicService",
-                    NotificationManager.IMPORTANCE_LOW);
-            channel.setShowBadge(false);
-            channel.setSound(null, null);
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-        }
-    }
-    
     @Nullable
     @Override
     protected HeadlessJsTaskConfig getTaskConfig(Intent intent) {
@@ -89,7 +74,7 @@ public class MusicService extends HeadlessJsTaskService {
                 String channel = null;
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    channel = Utils.NOTIFICATION_CHANNEL;
+                    channel = NotificationChannel.DEFAULT_CHANNEL_ID;
                 }
 
                 // Sets the service to foreground with an empty notification
@@ -142,8 +127,6 @@ public class MusicService extends HeadlessJsTaskService {
         super.onTaskRemoved(rootIntent);
 
         if (manager == null || manager.shouldStopWithApp()) {
-            manager.getPlayback().stop();
-            destroy();
             stopSelf();
         }
     }

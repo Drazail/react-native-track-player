@@ -15,15 +15,19 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.guichaguri.trackplayer.service.MusicManager;
 import com.guichaguri.trackplayer.service.Utils;
 import com.guichaguri.trackplayer.service.models.Track;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * @author Drazail
+ * @author Guichaguri
  */
 public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
@@ -40,10 +44,21 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
     @Override
     public void initialize() {
+
         if(cacheMaxSize > 0) {
             File cacheDir = new File(context.getCacheDir(), "TrackPlayer");
             DatabaseProvider db = new ExoDatabaseProvider(context);
             cache = new SimpleCache(cacheDir, new LeastRecentlyUsedCacheEvictor(cacheMaxSize), db);
+        } else if (cacheMaxSize == 0) {
+            File cacheDir = new File(context.getFilesDir(), "TrackPlayerPersisting");
+            DatabaseProvider db = new ExoDatabaseProvider(context);
+            NoOpCacheEvictor NoOpEvictor = new NoOpCacheEvictor();
+            cache = new SimpleCache(cacheDir, NoOpEvictor, db);
+        } else if (cacheMaxSize < 0) {
+            File cacheDir = new File(context.getCacheDir(), "TrackPlayer");
+            DatabaseProvider db = new ExoDatabaseProvider(context);
+            cache = new SimpleCache(cacheDir, new Evictor(cacheMaxSize), db);
+
         } else {
             cache = null;
         }
@@ -54,7 +69,7 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     }
 
     public DataSource.Factory enableCaching(DataSource.Factory ds) {
-        if(cache == null || cacheMaxSize <= 0) return ds;
+        if(cache == null || cacheMaxSize < 0) return ds;
 
         return new CacheDataSourceFactory(cache, ds, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
     }
@@ -75,26 +90,6 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
 
         prepare();
     }
-
-    @Override
-    public void updateTrackObject (Track track, int index, Promise promise){
-        try {
-            int currentIndex = player.getCurrentWindowIndex();
-            if (index < 0 || index > queue.size()) {
-                promise.resolve(null);
-            } else {
-    
-                queue.set(index, track);
-                MediaSource trackSource = track.toMediaSource(context, this);
-                source.removeMediaSource(index);
-                source.addMediaSource(index, trackSource, manager.getHandler(), Utils.toRunnable(promise));
-    
-                prepare();
-                }
-            }catch(Exception ex) {
-            Log.w(Utils.LOG, "Couldnt update Track", ex);
-            }
-        }
 
     @Override
     public void add(Collection<Track> tracks, int index, Promise promise) {
@@ -136,63 +131,6 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
             }
         }
     }
-
-    @Override
-    public void move(int index, int newIndex, Promise promise) {
-        queue.add(newIndex, queue.remove(index));
-        source.moveMediaSource(index, newIndex, manager.getHandler(), Utils.toRunnable(promise));
-    }
-
-    @Override
-    public void shuffle(final Promise promise) {
-        Random rand = new Random();
-        int length = queue.size();
-
-        // Fisher-Yates shuffle
-        for (int i = 0; i < length; i++) {
-            int swapIndex = rand.nextInt(i + 1);
-
-            queue.add(swapIndex, queue.remove(i));
-
-            if (length - 1 == i) {
-                // Resolve the promise after the last move command
-                source.moveMediaSource(i, swapIndex, manager.getHandler(), Utils.toRunnable(promise));
-            } else {
-                source.moveMediaSource(i, swapIndex);
-            }
-        }
-    }
-
-    @Override
-    public void shuffleFromIndex(final int index,  Promise promise) {
-        Random rand = new Random();
-        int length = queue.size();
-
-        // Fisher-Yates shuffle
-        for (int i = index+1; i < length; i++) {
-
-            int swapIndex = rand.nextInt(length - i)+i;
-            queue.add(swapIndex, queue.remove(i));
-
-            if (length - 1 == i) {
-                // Resolve the promise after the last move command
-                source.moveMediaSource(i, swapIndex, manager.getHandler(), Utils.toRunnable(promise));
-            } else {
-                source.moveMediaSource(i, swapIndex);
-            }
-        }
-    }
-
-    @Override
-    public void setRepeatMode(int repeatMode) {
-        player.setRepeatMode(repeatMode);
-    }
-    
-    @Override
-    public int getRepeatMode() {
-        return player.getRepeatMode();
-    }
-
 
     @Override
     public void removeUpcomingTracks() {
