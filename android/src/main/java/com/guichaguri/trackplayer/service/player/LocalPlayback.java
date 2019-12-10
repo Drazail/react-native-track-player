@@ -66,7 +66,7 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     }
 
     public DataSource.Factory enableCaching(DataSource.Factory ds) {
-        if(cache == null || cacheMaxSize <= 0) return ds;
+        if(cache == null || cacheMaxSize < 0) return ds;
 
         return new CacheDataSourceFactory(cache, ds, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
     }
