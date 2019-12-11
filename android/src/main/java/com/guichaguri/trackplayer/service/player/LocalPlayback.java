@@ -33,9 +33,10 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     private ConcatenatingMediaSource source;
     private boolean prepared = false;
 
-    public LocalPlayback(Context context, MusicManager manager, SimpleExoPlayer player, long maxCacheSize) {
+    public LocalPlayback(MusicService service, Context context, MusicManager manager, SimpleExoPlayer player, long maxCacheSize) {
         super(context, manager, player);
         this.cacheMaxSize = maxCacheSize;
+        this.service = service;
     }
 
     @Override
@@ -45,15 +46,18 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
             File cacheDir = new File(context.getCacheDir(), "TrackPlayer");
             DatabaseProvider db = new ExoDatabaseProvider(context);
             cache = new SimpleCache(cacheDir, new LeastRecentlyUsedCacheEvictor(cacheMaxSize), db);
+            Log.d(Utils.LOG, "cache: LeastRecentlyUsedCacheEvictor");
         } else if (cacheMaxSize == 0) {
             File cacheDir = new File(context.getFilesDir(), "TrackPlayerPersisting");
             DatabaseProvider db = new ExoDatabaseProvider(context);
             NoOpCacheEvictor NoOpEvictor = new NoOpCacheEvictor();
             cache = new SimpleCache(cacheDir, NoOpEvictor, db);
+            Log.d(Utils.LOG, "cache: NoOpEvictor");
         } else if (cacheMaxSize < 0) {
-            File cacheDir = new File(context.getCacheDir(), "TrackPlayer");
+            File cacheDir = new File(context.getFilesDir(), "TrackPlayerCustomEvictor");
             DatabaseProvider db = new ExoDatabaseProvider(context);
-            cache = new SimpleCache(cacheDir, new Evictor(cacheMaxSize), db);
+            cache = new SimpleCache(cacheDir, new Evictor(service, -cacheMaxSize), db);
+            Log.d(Utils.LOG, "cache: Evictor");
 
         } else {
             cache = null;
@@ -62,10 +66,10 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
         super.initialize();
 
         resetQueue();
-    }
+    } 
 
     public DataSource.Factory enableCaching(DataSource.Factory ds) {
-        if(cache == null || cacheMaxSize <= 0) return ds;
+        if(cache == null ) return ds;
 
         return new CacheDataSourceFactory(cache, ds, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
     }

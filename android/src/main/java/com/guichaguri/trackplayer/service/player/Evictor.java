@@ -2,12 +2,21 @@ package com.guichaguri.trackplayer.service.player;
 
 
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.cache.CacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.Cache;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
+import com.google.android.exoplayer2.upstream.cache.CacheUtil;
+import com.guichaguri.trackplayer.module.MusicEvents;
+import com.guichaguri.trackplayer.service.MusicService;
 import com.guichaguri.trackplayer.service.Utils;
 
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
+
+import android.util.Pair;
+
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -18,13 +27,14 @@ import java.util.NavigableSet;
  */
 
 public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
-
+    private final MusicService service;
     private final long maxBytes;
     private final TreeSet<CacheSpan> leastRecentlyUsed;
 
     private long currentSize;
 
-    public Evictor(long maxBytes) {
+    public Evictor(MusicService service, long maxBytes) {
+        this.service = service;
         this.maxBytes = maxBytes;
         this.leastRecentlyUsed = new TreeSet<>(this);
     }
@@ -42,17 +52,22 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
     @Override
     public void onStartFile(Cache cache, String key, long position, long length) {
         Log.d(Utils.LOG, "cache onStartFile : Cache:"+cache+"/ key: "+key+"/ position: "+ position +"/ Length: "+ length + "//");
+
         if (length != C.LENGTH_UNSET) {
             evictCache(cache, length);
         }
+
+        checkCachedStatus(cache, key);
     }
 
     @Override
     public void onSpanAdded(Cache cache, CacheSpan span) {
+
         Log.d(Utils.LOG, "cache onSpanAdded : Cache:"+cache+"/ CacheSpan: "+span+"//");
         leastRecentlyUsed.add(span);
         currentSize += span.length;
         evictCache(cache, 0);
+        checkCachedStatus(cache, span.key);
     }
 
     @Override
@@ -91,7 +106,7 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
         }
     }
 
-    public void evictSpans(Cache cache, String key) {
+    private void evictSpans(Cache cache, String key) {
         Log.d(Utils.LOG, "cache evictSpans for : Cache:"+cache+"/ key: "+key+"//");
         NavigableSet<CacheSpan> spansToRemove = cache.getCachedSpans(key);
         Iterator<CacheSpan> itr = spansToRemove.iterator();
@@ -103,5 +118,25 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
             } catch (Cache.CacheException e) {
                 // do nothing.
             }
+    }
+
+
+    private void checkCachedStatus(Cache cache, String url) {
+
+        Uri uri = Uri.parse(url);
+        DataSpec dataSpec = new DataSpec(uri);
+        // get information about what is cached for the given data spec
+
+        Pair<Long, Long> cachePair= CacheUtil.getCached(dataSpec, cache, null);
+        Long requestedBytes = cachePair.first;
+        Long cachedBytes = cachePair.second;
+        if(requestedBytes <= cachedBytes){
+            Bundle bundle = new Bundle();
+            bundle.putString("url", url);
+            bundle.putString("cached", "true");
+            service.emit(MusicEvents.PLAYBACK_CACHED, bundle);
+            Log.d(Utils.LOG, "cached");
+        }
+        Log.d(Utils.LOG, "cache cachePair : Cache:"+cachePair+" for Key: "+url+"//");
     }
 }
