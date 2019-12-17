@@ -17,6 +17,11 @@ import android.util.Log;
 
 import android.util.Pair;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -37,6 +42,7 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
         this.service = service;
         this.maxBytes = maxBytes;
         this.leastRecentlyUsed = new TreeSet<>(this);
+
     }
 
     @Override
@@ -55,9 +61,8 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
 
         if (length != C.LENGTH_UNSET) {
             evictCache(cache, length);
+            checkCachedStatus(cache, key);
         }
-
-        checkCachedStatus(cache, key);
     }
 
     @Override
@@ -124,19 +129,50 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
     private void checkCachedStatus(Cache cache, String url) {
 
         Uri uri = Uri.parse(url);
+        long fileSize = getFileSize(url);
         DataSpec dataSpec = new DataSpec(uri);
         // get information about what is cached for the given data spec
 
         Pair<Long, Long> cachePair= CacheUtil.getCached(dataSpec, cache, null);
-        Long requestedBytes = cachePair.first;
-        Long cachedBytes = cachePair.second;
-        if(requestedBytes <= cachedBytes){
-            Bundle bundle = new Bundle();
-            bundle.putString("url", url);
-            bundle.putString("cached", "true");
-            service.emit(MusicEvents.PLAYBACK_CACHED, bundle);
-            Log.d(Utils.LOG, "cached");
-        }
+
+        long requestedBytes = cachePair.first;
+        long cachedBytes = cachePair.second;
+
+        Bundle bundle = new Bundle();
+        bundle.putString("url", url);
+        bundle.putString("content-length",  Long.toString(fileSize));
+        bundle.putString("cached", Long.toString(cachedBytes));
+        bundle.putString("requestedBytes",  Long.toString(requestedBytes));
+        service.emit(MusicEvents.PLAYBACK_CACHED, bundle);
+        Log.d(Utils.LOG, "cached");
+
         Log.d(Utils.LOG, "cache cachePair : Cache:"+cachePair+" for Key: "+url+"//");
     }
+
+    private long getFileSize(String uri) {
+        URL url;
+        long fileSize = 0;
+        try {
+            url = new URL(uri);
+            URLConnection conn = null;
+            try {
+                conn = url.openConnection();
+                if(conn instanceof HttpURLConnection) {
+                    ((HttpURLConnection)conn).setRequestMethod("HEAD");
+                }
+                fileSize = conn.getContentLength();
+            } catch (IOException e) {
+                Log.d(Utils.LOG, "cache IOException : "+e+" for Key: "+uri+"//");
+            } finally {
+                if(conn instanceof HttpURLConnection) {
+                    ((HttpURLConnection)conn).disconnect();
+                }
+            }
+        } catch (MalformedURLException e) {
+            Log.d(Utils.LOG, "cache MalformedURLException : "+e+" for Key: "+uri+"//");
+        }
+        Log.d(Utils.LOG, "cache fileSize : "+fileSize+" for Key: "+uri+"//");
+        return fileSize;
+    }
+
 }
