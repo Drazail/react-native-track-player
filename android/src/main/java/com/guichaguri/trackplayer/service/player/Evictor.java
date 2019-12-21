@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.cache.CacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.Cache;
+import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheSpan;
 import com.google.android.exoplayer2.upstream.cache.CacheUtil;
 import com.guichaguri.trackplayer.module.MusicEvents;
@@ -17,6 +18,11 @@ import android.util.Log;
 
 import android.util.Pair;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -37,6 +43,7 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
         this.service = service;
         this.maxBytes = maxBytes;
         this.leastRecentlyUsed = new TreeSet<>(this);
+
     }
 
     @Override
@@ -47,6 +54,7 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
     @Override
     public void onCacheInitialized() {
         Log.d(Utils.LOG, "cache initialized");
+
     }
 
     @Override
@@ -56,8 +64,6 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
         if (length != C.LENGTH_UNSET) {
             evictCache(cache, length);
         }
-
-        checkCachedStatus(cache, key);
     }
 
     @Override
@@ -67,7 +73,7 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
         leastRecentlyUsed.add(span);
         currentSize += span.length;
         evictCache(cache, 0);
-        checkCachedStatus(cache, span.key);
+        checkCachedStatus(span, cache);
     }
 
     @Override
@@ -121,22 +127,62 @@ public final class Evictor implements CacheEvictor, Comparator<CacheSpan> {
     }
 
 
-    private void checkCachedStatus(Cache cache, String url) {
+    private void checkCachedStatus(CacheSpan span, Cache cache) {
 
-        Uri uri = Uri.parse(url);
-        DataSpec dataSpec = new DataSpec(uri);
+       // Uri uri = Uri.parse(url);
+        //long fileSize = getFileSize(url);
+       // DataSpec dataSpec = new DataSpec(uri,0,fileSize,key);
         // get information about what is cached for the given data spec
+       // CacheKeyFactory fac = dataSpec1 -> key;
+       // Pair<Long, Long> cachePair= CacheUtil.getCached(dataSpec, cache, fac);
 
-        Pair<Long, Long> cachePair= CacheUtil.getCached(dataSpec, cache, null);
-        Long requestedBytes = cachePair.first;
-        Long cachedBytes = cachePair.second;
-        if(requestedBytes <= cachedBytes){
-            Bundle bundle = new Bundle();
-            bundle.putString("url", url);
-            bundle.putString("cached", "true");
-            service.emit(MusicEvents.PLAYBACK_CACHED, bundle);
-            Log.d(Utils.LOG, "cached");
+        //long requestedBytes = cachePair.first;
+        //long cachedBytes = cachePair.second;
+        Long cachedBytes = Long.valueOf(0);
+        NavigableSet<CacheSpan> cahcedSpans = cache.getCachedSpans(span.key);
+        for (CacheSpan cachedSpan : cahcedSpans){
+            cachedBytes += cachedSpan.length;
         }
-        Log.d(Utils.LOG, "cache cachePair : Cache:"+cachePair+" for Key: "+url+"//");
+        Bundle bundle = new Bundle();
+        //bundle.putString("url", url);
+        bundle.putString("key", span.key);
+        bundle.putString("spanIsCached", String.valueOf(span.isCached));
+        bundle.putString("bytes cached", String.valueOf(cachedBytes));
+        //bundle.putString("content-length",  Long.toString(fileSize));
+        //bundle.putString("cached", Long.toString(cachedBytes));
+        //bundle.putString("requestedBytes",  Long.toString(requestedBytes));
+        service.emit(MusicEvents.PLAYBACK_CACHED, bundle);
+        Log.d(Utils.LOG, "cached");
+
+        Log.d(Utils.LOG, "cache cachePair : Cache:"+span.isCached+" total cached bytes: "+cachedBytes+" for Key: "+span.key+"//");
     }
+
+    private long getFileSize(String uri) {
+        URL url;
+        long fileSize = 0;
+        try {
+            url = new URL(uri);
+            URLConnection conn = null;
+            try {
+                conn = url.openConnection();
+                if(conn instanceof HttpURLConnection) {
+                    ((HttpURLConnection)conn).setRequestMethod("GET");
+                    fileSize = conn.getContentLength();
+                    Log.d(Utils.LOG, "cache HeaderFields : "+conn.getHeaderFields()+" for Key: "+uri+"//");
+
+                }
+            } catch (IOException e) {
+                Log.d(Utils.LOG, "cache IOException : "+e+" for Key: "+uri+"//");
+            } finally {
+                if(conn instanceof HttpURLConnection) {
+                    ((HttpURLConnection)conn).disconnect();
+                }
+            }
+        } catch (MalformedURLException e) {
+            Log.d(Utils.LOG, "cache MalformedURLException : "+e+" for Key: "+uri+"//");
+        }
+        Log.d(Utils.LOG, "cache fileSize : "+fileSize+" for Key: "+uri+"//");
+        return fileSize;
+    }
+
 }

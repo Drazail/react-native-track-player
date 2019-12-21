@@ -18,6 +18,7 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.guichaguri.trackplayer.service.MusicManager;
+import com.guichaguri.trackplayer.service.MusicService;
 import com.guichaguri.trackplayer.service.Utils;
 import com.guichaguri.trackplayer.service.models.Track;
 import java.io.File;
@@ -33,6 +34,8 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     private SimpleCache cache;
     private ConcatenatingMediaSource source;
     private boolean prepared = false;
+    
+    private final MusicService service;
 
     public LocalPlayback(MusicService service, Context context, MusicManager manager, SimpleExoPlayer player, long maxCacheSize) {
         super(context, manager, player);
@@ -57,7 +60,7 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
         } else if (cacheMaxSize < 0) {
             File cacheDir = new File(context.getFilesDir(), "TrackPlayerCustomEvictor");
             DatabaseProvider db = new ExoDatabaseProvider(context);
-            cache = new SimpleCache(cacheDir, new Evictor(service, -cacheMaxSize), db);
+            cache = new SimpleCache(cacheDir, new Evictor(service, -cacheMaxSize),db);
             Log.d(Utils.LOG, "cache: Evictor");
 
         } else {
@@ -72,7 +75,7 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     public DataSource.Factory enableCaching(DataSource.Factory ds) {
         if(cache == null ) return ds;
 
-        return new CacheDataSourceFactory(cache, ds, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+        return new CacheDataSourceFactory(cache, ds);
     }
 
     private void prepare() {

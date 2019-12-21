@@ -7,7 +7,11 @@ import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.RatingCompat;
 import android.support.v4.media.session.MediaSessionCompat.QueueItem;
+import android.util.Log;
+
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.mp3.Mp3Extractor;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -50,6 +54,7 @@ public class Track {
     public String id;
     public Uri uri;
     public int resourceId;
+    public String key;
 
     public TrackType type = TrackType.DEFAULT;
 
@@ -73,6 +78,8 @@ public class Track {
     public final long queueId;
 
     public Track(Context context, Bundle bundle, int ratingType) {
+
+
         id = bundle.getString("id");
 
         resourceId = Utils.getRawResourceId(context, bundle, "url");
@@ -94,6 +101,7 @@ public class Track {
 
         contentType = bundle.getString("contentType");
         userAgent = bundle.getString("userAgent");
+        key = bundle.getString("key");
 
         Bundle httpHeaders = bundle.getBundle("headers");
         if(httpHeaders != null) {
@@ -164,6 +172,7 @@ public class Track {
 
     public MediaSource toMediaSource(Context ctx, LocalPlayback playback) {
         // Updates the user agent if not set
+
         if(userAgent == null || userAgent.isEmpty())
             userAgent = Util.getUserAgent(ctx, "react-native-track-player");
 
@@ -173,13 +182,12 @@ public class Track {
 
             try {
                 RawResourceDataSource raw = new RawResourceDataSource(ctx);
-                raw.open(new DataSpec(uri));
-                ds = new DataSource.Factory() {
-                    @Override
-                    public DataSource createDataSource() {
-                        return raw;
-                    }
-                };
+                DataSpec dataSpec;
+
+                    dataSpec = new DataSpec(uri);
+
+                raw.open(dataSpec);
+                ds = () -> raw;
             } catch(IOException ex) {
                 // Should never happen
                 throw new RuntimeException(ex);
@@ -193,8 +201,9 @@ public class Track {
         } else {
 
             // Creates a default http source factory, enabling cross protocol redirects
+
             DefaultHttpDataSourceFactory factory = new DefaultHttpDataSourceFactory(
-                    userAgent, null,
+                    userAgent, HttpFactoryListener,
                     DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                     DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                     true
@@ -205,6 +214,7 @@ public class Track {
             }
 
             ds = playback.enableCaching(factory);
+
 
         }
 
@@ -219,9 +229,38 @@ public class Track {
                 return new SsMediaSource.Factory(new DefaultSsChunkSource.Factory(ds), ds)
                         .createMediaSource(uri);
             default:
+                if(key != null){
                 return new ProgressiveMediaSource.Factory(ds, new DefaultExtractorsFactory()
                         .setConstantBitrateSeekingEnabled(true))
+                        .setCustomCacheKey(key)
                         .createMediaSource(uri);
+                }else{
+                    return new ProgressiveMediaSource.Factory(ds, new DefaultExtractorsFactory()
+                            .setConstantBitrateSeekingEnabled(true))
+                            .createMediaSource(uri);
+                }
         }
     }
+
+    private TransferListener HttpFactoryListener = new TransferListener() {
+        @Override
+        public void onTransferInitializing(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+            Log.d(Utils.LOG, "cache onTransferInitializing : source:"+source+" source:"+dataSpec+" source"+isNetwork+"//");
+        }
+
+        @Override
+        public void onTransferStart(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+            Log.d(Utils.LOG, "cache onTransferStart : source:"+source+" source:"+dataSpec+" source"+isNetwork+"//");
+        }
+
+        @Override
+        public void onBytesTransferred(DataSource source, DataSpec dataSpec, boolean isNetwork, int bytesTransferred) {
+            //Log.d(Utils.LOG, "cache onBytesTransferred : source:"+source+" source:"+dataSpec+" source"+isNetwork+"bytesTransferred"+bytesTransferred+"//");
+        }
+
+        @Override
+        public void onTransferEnd(DataSource source, DataSpec dataSpec, boolean isNetwork) {
+            Log.d(Utils.LOG, "cache onTransferEnd : source:"+source+" source:"+dataSpec+" source"+isNetwork+"//");
+        }
+    };
 }
